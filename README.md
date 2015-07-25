@@ -10,65 +10,60 @@ Vmware Fusion Cookbook
 [codeclimate]: https://codeclimate.com/github/RoboticCheese/vmware-fusion-chef
 [coveralls]: https://coveralls.io/r/RoboticCheese/vmware-fusion-chef
 
-TODO: Enter the cookbook description here.
+A Chef cookbook for installing VMware Fusion. Specifically, it installs the
+trial version that will then prompt you to complete installation and
+registration the first time it is run.
 
 Requirements
 ============
 
-TODO: Describe cookbook dependencies.
+This cookbook consumes the dmg cookbook to support installing OS X packages.
 
 Usage
 =====
 
-TODO: Describe how to use the cookbook.
+Either add the default recipe to your run_list or use the included resource in
+a recipe of your own.
 
 Recipes
 =======
 
 ***default***
 
-TODO: Describe each component recipe.
-
-Attributes
-==========
-
-***default***
-
-TODO: Describe any noteworthy attributes.
+Installs VMware Fusion.
 
 Resources
 =========
 
-***vmware_fusion***
+***vmware_fusion_app***
 
-TODO: Describe each included resource.
+Used to manage the installation of the VMware Fusion app.
 
 Syntax:
 
-    vmware_fusion 'my_resource' do
-        attribute1 'value1'
-        action :create
+    vmware_fusion_app 'default' do
+      action :install
     end
 
 Actions:
 
-| Action  | Description  |
-|---------|--------------|
-| action1 | Do something |
+| Action     | Description       |
+|------------|-------------------|
+| `:install` | Install the app   |
+| `:remove`  | Uninstall the app |
 
 Attributes:
 
 | Attribute  | Default        | Description          |
 |------------|----------------|----------------------|
-| attribute1 | `'some_value'` | Do something         |
-| action     | `:create`      | Action(s) to perform |
+| action     | `:install`     | Action(s) to perform |
 
 Providers
 =========
 
-TODO: Describe each included provider
+***Chef::Provider::VmwareFusionApp***
 
-***Chef::Provider::SomeProvider***
+Provider for OS X (the only platform VMware Fusion is for).
 
 Contributing
 ============

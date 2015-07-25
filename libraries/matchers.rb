@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 #
 # Cookbook Name:: vmware-fusion
-# Recipe:: default
+# Library:: matchers
 #
 # Copyright 2015 Jonathan Hartman
 #
@@ -18,6 +18,12 @@
 # limitations under the License.
 #
 
-vmware_fusion_app 'default' do
-  action :install
+if defined?(ChefSpec)
+  ChefSpec.define_matcher(:vmware_fusion_app)
+
+  [:install, :remove].each do |a|
+    define_method("#{a}_vmware_fusion_app") do |name|
+      ChefSpec::Matchers::ResourceMatcher.new(:vmware_fusion_app, a, name)
+    end
+  end
 end

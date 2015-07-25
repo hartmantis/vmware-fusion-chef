@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 #
-# Cookbook Name:: vmware-fusion
-# Recipe:: default
+# Cookbook Name:: vmware_fusion
+# Library:: resource_vmware_fusion_app
 #
 # Copyright 2015 Jonathan Hartman
 #
@@ -18,6 +18,22 @@
 # limitations under the License.
 #
 
-vmware_fusion_app 'default' do
-  action :install
+require 'chef/resource/lwrp_base'
+
+class Chef
+  class Resource
+    # A Chef resource for the VMWare Fusion app.
+    #
+    # @author Jonathan Hartman <j@p4nt5.com>
+    class VmwareFusionApp < Resource::LWRPBase
+      self.resource_name = :vmware_fusion_app
+      actions :install, :remove
+      default_action :install
+
+      #
+      # Attribute for an optional specific package URL.
+      #
+      attribute :source, kind_of: String, default: nil
+    end
+  end
 end

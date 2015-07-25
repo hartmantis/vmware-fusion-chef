@@ -3,11 +3,10 @@
 require_relative '../spec_helper'
 
 describe 'vmware-fusion::default' do
-  let(:platform) { { platform: 'ubuntu', version: '14.04' } }
-  let(:runner) { ChefSpec::SoloRunner.new(platform) }
+  let(:runner) { ChefSpec::SoloRunner.new }
   let(:chef_run) { runner.converge(described_recipe) }
 
-  it 'converges successfully' do
-    expect(chef_run).to be
+  it 'installs VMWare Fusion' do
+    expect(chef_run).to install_vmware_fusion_app('default')
   end
 end

@@ -6,13 +6,18 @@ provisioner:
   name: chef_zero
 
 platforms:
-  - name: ubuntu-14.04
-  - name: ubuntu-12.04
-  - name: centos-6.5
-  - name: centos-5.11
+  - name: macosx-10.10
+    driver:
+      box: roboticcheese/macosx-10.10
+      ssh:
+        insert_key: false
 
 suites:
   - name: default
     run_list:
       - recipe[vmware-fusion]
+    attributes:
+  - name: uninstall
+    run_list:
+      - recipe[vmware-fusion_test::uninstall]
     attributes:

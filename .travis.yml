@@ -1,4 +1,4 @@
-language: ruby
+language: objective-c
 
 install:
   - curl -L https://www.chef.io/chef/install.sh | sudo bash -s -- -P chefdk
@@ -7,10 +7,9 @@ install:
 before_script:
   # Pending ENV support in Kitchen's Rake tasks and not just the CLI
   - cp .kitchen.travis.yml .kitchen.local.yml
-  - echo -e $DIGITALOCEAN_SSH_KEY_BODY > ~/.ssh/id_rsa
 
 script:
-  - chef exec rake
+  - chef exec rake && chef exec kitchen test
 
 after_script:
 

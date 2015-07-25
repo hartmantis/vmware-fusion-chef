@@ -30,4 +30,4 @@ Kitchen::RakeTasks.new
 
 Stove::RakeTask.new
 
-task default: %w(cane rubocop loc foodcritic spec kitchen:all)
+task default: %w(cane rubocop loc foodcritic spec)
