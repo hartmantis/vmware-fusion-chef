@@ -1,4 +1,4 @@
-Vmware Fusion Cookbook
+VMware Fusion Cookbook
 ======================
 [![Cookbook Version](https://img.shields.io/cookbook/v/vmware-fusion.svg)][cookbook]
 [![Build Status](https://img.shields.io/travis/RoboticCheese/vmware-fusion-chef.svg)][travis]
@@ -10,9 +10,7 @@ Vmware Fusion Cookbook
 [codeclimate]: https://codeclimate.com/github/RoboticCheese/vmware-fusion-chef
 [coveralls]: https://coveralls.io/r/RoboticCheese/vmware-fusion-chef
 
-A Chef cookbook for installing VMware Fusion. Specifically, it installs the
-trial version that will then prompt you to complete installation and
-registration the first time it is run.
+A Chef cookbook for installing VMware Fusion.
 
 Requirements
 ============

@@ -43,17 +43,11 @@ describe Chef::Provider::VmwareFusionApp do
   end
 
   describe '#action_install' do
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:package_source)
-        .and_return('https://example.com/vmwf.dmg')
-    end
-
-    it 'uses a dmg_package to install VMware Fusion' do
+    it 'installs and initializes the package' do
       p = provider
-      expect(p).to receive(:dmg_package).with('VMware Fusion').and_yield
-      expect(p).to receive(:source).with('https://example.com/vmwf.dmg')
-      expect(p).to receive(:action).with(:install)
-      p.send(:action_install)
+      expect(p).to receive(:install_package)
+      expect(p).to receive(:initialize_package)
+      p.action_install
     end
   end
 
@@ -70,7 +64,36 @@ describe Chef::Provider::VmwareFusionApp do
         expect(p).to receive(:recursive).with(true)
         expect(p).to receive(:action).with(:delete)
       end
-      p.send(:action_remove)
+      p.action_remove
+    end
+  end
+
+  describe '#initialize_package' do
+    it 'uses an execute to initialize VMware Fusion' do
+      p = provider
+      expect(p).to receive(:execute).with('Initialize VMware Fusion').and_yield
+      cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+            "Initialize\\ VMware\\ Fusion.tool set '' '' ''"
+      expect(p).to receive(:command).with(cmd)
+      expect(p).to receive(:action).with(:nothing)
+      p.send(:initialize_package)
+    end
+  end
+
+  describe '#install_package' do
+    before(:each) do
+      allow_any_instance_of(described_class).to receive(:package_source)
+        .and_return('https://example.com/vmwf.dmg')
+    end
+
+    it 'uses a dmg_package to install VMware Fusion' do
+      p = provider
+      expect(p).to receive(:dmg_package).with('VMware Fusion').and_yield
+      expect(p).to receive(:source).with('https://example.com/vmwf.dmg')
+      expect(p).to receive(:action).with(:install)
+      expect(p).to receive(:notifies).with(:run,
+                                           'execute[Initialize VMware Fusion]')
+      p.send(:install_package)
     end
   end
 

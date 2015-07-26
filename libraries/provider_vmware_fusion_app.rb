@@ -48,11 +48,8 @@ class Chef
       # Install the app.
       #
       action :install do
-        s = package_source
-        dmg_package 'VMware Fusion' do
-          source s
-          action :install
-        end
+        install_package
+        initialize_package
       end
 
       #
@@ -72,6 +69,31 @@ class Chef
       end
 
       private
+
+      #
+      # Run the included initialization script to do all the post-install work.
+      #
+      def initialize_package
+        path = ::File.join(PATH,
+                           'Contents/Library/Initialize VMware Fusion.tool')
+        cmd = "#{path.gsub(' ', '\\ ')} set '' '' ''"
+        execute 'Initialize VMware Fusion' do
+          command cmd
+          action :nothing
+        end
+      end
+
+      #
+      # Use a dmg_package resource to copy the app into place.
+      #
+      def install_package
+        s = package_source
+        dmg_package 'VMware Fusion' do
+          source s
+          action :install
+          notifies :run, 'execute[Initialize VMware Fusion]'
+        end
+      end
 
       #
       # Follow the site redirect to get a .dmg download URL.
