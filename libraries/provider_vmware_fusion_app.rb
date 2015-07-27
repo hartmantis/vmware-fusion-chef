@@ -76,7 +76,7 @@ class Chef
       def initialize_package
         path = ::File.join(PATH,
                            'Contents/Library/Initialize VMware Fusion.tool')
-        cmd = "#{path.gsub(' ', '\\ ')} set '' '' ''"
+        cmd = "#{path.gsub(' ', '\\ ')} set '' '' '#{new_resource.license}'"
         execute 'Initialize VMware Fusion' do
           command cmd
           action :nothing

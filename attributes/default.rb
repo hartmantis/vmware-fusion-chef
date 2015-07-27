@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 #
 # Cookbook Name:: vmware-fusion
-# Recipe:: default
+# Attributes:: default
 #
 # Copyright 2015 Jonathan Hartman
 #
@@ -18,7 +18,4 @@
 # limitations under the License.
 #
 
-vmware_fusion_app 'default' do
-  license node['vmware_fusion']['license']
-  action :install
-end
+default['vmware_fusion']['license'] = nil

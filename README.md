@@ -28,7 +28,16 @@ Recipes
 
 ***default***
 
-Installs VMware Fusion.
+Installs VMware Fusion with an optional license key attribute.
+
+Attributes
+==========
+
+***default***
+
+An optional license key can be passed in to be configured during the Chef run:
+
+    default['vmware_fusion']['license'] = nil
 
 Resources
 =========
@@ -40,6 +49,7 @@ Used to manage the installation of the VMware Fusion app.
 Syntax:
 
     vmware_fusion_app 'default' do
+      license 'abc123'
       action :install
     end
 
@@ -52,9 +62,10 @@ Actions:
 
 Attributes:
 
-| Attribute  | Default        | Description          |
-|------------|----------------|----------------------|
-| action     | `:install`     | Action(s) to perform |
+| Attribute  | Default        | Description             |
+|------------|----------------|-------------------------|
+| license    | `nil`          | An optional license key |
+| action     | `:install`     | Action(s) to perform    |
 
 Providers
 =========

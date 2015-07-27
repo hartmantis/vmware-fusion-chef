@@ -69,14 +69,34 @@ describe Chef::Provider::VmwareFusionApp do
   end
 
   describe '#initialize_package' do
-    it 'uses an execute to initialize VMware Fusion' do
-      p = provider
-      expect(p).to receive(:execute).with('Initialize VMware Fusion').and_yield
-      cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
-            "Initialize\\ VMware\\ Fusion.tool set '' '' ''"
-      expect(p).to receive(:command).with(cmd)
-      expect(p).to receive(:action).with(:nothing)
-      p.send(:initialize_package)
+    let(:license) { nil }
+
+    shared_examples_for 'any resource' do
+      it 'uses an execute to initialize VMware Fusion' do
+        p = provider
+        expect(p).to receive(:execute).with('Initialize VMware Fusion')
+          .and_yield
+        cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+              "Initialize\\ VMware\\ Fusion.tool set '' '' '#{license}'"
+        expect(p).to receive(:command).with(cmd)
+        expect(p).to receive(:action).with(:nothing)
+        p.send(:initialize_package)
+      end
+    end
+
+    context 'an all-default resource' do
+      it_behaves_like 'any resource'
+    end
+
+    context 'a resource with a given license key' do
+      let(:license) { 'abc123' }
+      let(:new_resource) do
+        r = super()
+        r.license(license)
+        r
+      end
+
+      it_behaves_like 'any resource'
     end
   end
 
