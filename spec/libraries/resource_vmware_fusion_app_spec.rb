@@ -53,4 +53,37 @@ describe Chef::Resource::VmwareFusionApp do
       end
     end
   end
+
+  describe '#license' do
+    let(:license) { nil }
+    let(:resource) do
+      r = super()
+      r.license(license) if license
+      r
+    end
+
+    context 'default attribute' do
+      let(:source) { nil }
+
+      it 'defaults to nil' do
+        expect(resource.license).to eq(nil)
+      end
+    end
+
+    context 'a valid override' do
+      let(:license) { 'abc123' }
+
+      it 'returns the override' do
+        expect(resource.license).to eq('abc123')
+      end
+    end
+
+    context 'an invalid override' do
+      let(:license) { :elsewhere }
+
+      it 'raises an error' do
+        expect { resource }.to raise_error(Chef::Exceptions::ValidationFailed)
+      end
+    end
+  end
 end

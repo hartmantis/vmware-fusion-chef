@@ -34,6 +34,11 @@ class Chef
       # Attribute for an optional specific package URL.
       #
       attribute :source, kind_of: String, default: nil
+
+      #
+      # Attribute for an optional VMware Fusion license key
+      #
+      attribute :license, kind_of: String, default: nil
     end
   end
 end
