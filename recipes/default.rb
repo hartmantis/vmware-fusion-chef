@@ -18,7 +18,6 @@
 # limitations under the License.
 #
 
-vmware_fusion_app 'default' do
+vmware_fusion 'default' do
   license node['vmware_fusion']['license']
-  action :install
 end

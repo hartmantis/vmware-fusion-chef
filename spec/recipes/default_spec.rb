@@ -14,17 +14,25 @@ describe 'vmware-fusion::default' do
   context 'all default attributes' do
     let(:overrides) { nil }
 
-    it 'installs VMWare Fusion with no license key' do
-      expect(chef_run).to install_vmware_fusion_app('default')
-        .with(license: nil)
+    it 'installs VMWare Fusion' do
+      expect(chef_run).to install_vmware_fusion('default').with(license: nil)
+    end
+
+    it 'configures VMware Fusion' do
+      expect(chef_run).to configure_vmware_fusion('default').with(license: nil)
     end
   end
 
   context 'an overridden license attribute' do
     let(:overrides) { { license: 'abc123' } }
 
-    it 'installs VMware Fusion with the license key' do
-      expect(chef_run).to install_vmware_fusion_app('default')
+    it 'installs VMware Fusion' do
+      expect(chef_run).to install_vmware_fusion('default')
+        .with(license: 'abc123')
+    end
+
+    it 'configures VMware Fusion' do
+      expect(chef_run).to configure_vmware_fusion('default')
         .with(license: 'abc123')
     end
   end

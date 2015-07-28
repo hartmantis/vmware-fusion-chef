@@ -20,16 +20,16 @@
 
 require 'net/http'
 require 'chef/provider/lwrp_base'
+require_relative 'provider_vmware_fusion'
 require_relative 'resource_vmware_fusion_app'
 
 class Chef
   class Provider
-    # A Chef provider for VMWare Fusion.
+    # A Chef provider for the VMWare Fusion application itself.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class VmwareFusionApp < Provider::LWRPBase
       URL ||= 'https://www.vmware.com/go/try-fusion-en'
-      PATH ||= '/Applications/VMware Fusion.app'
 
       use_inline_resources
 
@@ -45,11 +45,14 @@ class Chef
       end
 
       #
-      # Install the app.
+      # Use a dmg_package resource to download and install the app.
       #
       action :install do
-        install_package
-        initialize_package
+        s = package_source
+        dmg_package 'VMware Fusion' do
+          source s
+          action :install
+        end
       end
 
       #
@@ -60,7 +63,7 @@ class Chef
           ignore_failure true
         end
         [::File.expand_path('~/Library/Application Support/VMware Fusion'),
-         ::File.expand_path(PATH)].each do |d|
+         ::File.expand_path(VmwareFusion::PATH)].each do |d|
           directory d do
             recursive true
             action :delete
@@ -69,31 +72,6 @@ class Chef
       end
 
       private
-
-      #
-      # Run the included initialization script to do all the post-install work.
-      #
-      def initialize_package
-        path = ::File.join(PATH,
-                           'Contents/Library/Initialize VMware Fusion.tool')
-        cmd = "#{path.gsub(' ', '\\ ')} set '' '' '#{new_resource.license}'"
-        execute 'Initialize VMware Fusion' do
-          command cmd
-          action :nothing
-        end
-      end
-
-      #
-      # Use a dmg_package resource to copy the app into place.
-      #
-      def install_package
-        s = package_source
-        dmg_package 'VMware Fusion' do
-          source s
-          action :install
-          notifies :run, 'execute[Initialize VMware Fusion]'
-        end
-      end
 
       #
       # Follow the site redirect to get a .dmg download URL.

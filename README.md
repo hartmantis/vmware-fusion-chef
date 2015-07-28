@@ -42,6 +42,32 @@ An optional license key can be passed in to be configured during the Chef run:
 Resources
 =========
 
+***vmware_fusion***
+
+A parent resource that wraps the app and config resources.
+
+Syntax:
+
+    vmware_fusion 'default' do
+      license 'abc123'
+      action :install
+    end
+
+Actions:
+
+| Action       | Description       |
+|--------------|-------------------|
+| `:install`   | Install the app   |
+| `:remove`    | Uninstall the app |
+| `:configure` | Configure the app |
+
+Attributes:
+
+| Attribute  | Default        | Description             |
+|------------|----------------|-------------------------|
+| license    | `nil`          | An optional license key |
+| action     | `:install`     | Action(s) to perform    |
+
 ***vmware_fusion_app***
 
 Used to manage the installation of the VMware Fusion app.
@@ -49,7 +75,6 @@ Used to manage the installation of the VMware Fusion app.
 Syntax:
 
     vmware_fusion_app 'default' do
-      license 'abc123'
       action :install
     end
 
@@ -64,15 +89,46 @@ Attributes:
 
 | Attribute  | Default        | Description             |
 |------------|----------------|-------------------------|
-| license    | `nil`          | An optional license key |
 | action     | `:install`     | Action(s) to perform    |
+
+***vmware_fusion_config***
+
+Used to manage the configuration of VMware Fusion.
+
+Syntax:
+
+    vmware_fusion_config 'default' do
+      license 'abc123'
+      action :configure
+    end
+
+Actions:
+
+| Action       | Description       |
+|--------------|-------------------|
+| `:configure` | Configure the app |
+
+Attributes:
+
+| Attribute  | Default        | Description             |
+|------------|----------------|-------------------------|
+| license    | `nil`          | An optional license key |
+| action     | `:configure`   | Action(s) to perform    |
 
 Providers
 =========
 
+***Chef::Provider::VmwareFusion***
+
+Main provider for OS X (the only platform VMware Fusion is for).
+
 ***Chef::Provider::VmwareFusionApp***
 
-Provider for OS X (the only platform VMware Fusion is for).
+A provider dedicated to app installation and removal.
+
+***Chef::Provider::VmwareFusionConfig***
+
+A provider dedicated to app configuration.
 
 Contributing
 ============
