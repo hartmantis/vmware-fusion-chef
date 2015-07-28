@@ -15,13 +15,6 @@ describe Chef::Provider::VmwareFusionApp do
     end
   end
 
-  describe 'PATH' do
-    it 'returns the app directory' do
-      expected = '/Applications/VMware Fusion.app'
-      expect(described_class::PATH).to eq(expected)
-    end
-  end
-
   describe '.provides?' do
     let(:platform) { nil }
     let(:node) { ChefSpec::Macros.stub_node('node.example', platform) }
@@ -43,10 +36,16 @@ describe Chef::Provider::VmwareFusionApp do
   end
 
   describe '#action_install' do
-    it 'installs and initializes the package' do
+    before(:each) do
+      allow_any_instance_of(described_class).to receive(:package_source)
+        .and_return('https://example.com/vmwf.dmg')
+    end
+
+    it 'uses a dmg_package to install VMware Fusion' do
       p = provider
-      expect(p).to receive(:install_package)
-      expect(p).to receive(:initialize_package)
+      expect(p).to receive(:dmg_package).with('VMware Fusion').and_yield
+      expect(p).to receive(:source).with('https://example.com/vmwf.dmg')
+      expect(p).to receive(:action).with(:install)
       p.action_install
     end
   end
@@ -58,62 +57,13 @@ describe Chef::Provider::VmwareFusionApp do
       expect(p).to receive(:ignore_failure).with(true)
       [
         File.expand_path('~/Library/Application Support/VMware Fusion'),
-        described_class::PATH
+        Chef::Provider::VmwareFusion::PATH
       ].each do |d|
         expect(p).to receive(:directory).with(d).and_yield
         expect(p).to receive(:recursive).with(true)
         expect(p).to receive(:action).with(:delete)
       end
       p.action_remove
-    end
-  end
-
-  describe '#initialize_package' do
-    let(:license) { nil }
-
-    shared_examples_for 'any resource' do
-      it 'uses an execute to initialize VMware Fusion' do
-        p = provider
-        expect(p).to receive(:execute).with('Initialize VMware Fusion')
-          .and_yield
-        cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
-              "Initialize\\ VMware\\ Fusion.tool set '' '' '#{license}'"
-        expect(p).to receive(:command).with(cmd)
-        expect(p).to receive(:action).with(:nothing)
-        p.send(:initialize_package)
-      end
-    end
-
-    context 'an all-default resource' do
-      it_behaves_like 'any resource'
-    end
-
-    context 'a resource with a given license key' do
-      let(:license) { 'abc123' }
-      let(:new_resource) do
-        r = super()
-        r.license(license)
-        r
-      end
-
-      it_behaves_like 'any resource'
-    end
-  end
-
-  describe '#install_package' do
-    before(:each) do
-      allow_any_instance_of(described_class).to receive(:package_source)
-        .and_return('https://example.com/vmwf.dmg')
-    end
-
-    it 'uses a dmg_package to install VMware Fusion' do
-      p = provider
-      expect(p).to receive(:dmg_package).with('VMware Fusion').and_yield
-      expect(p).to receive(:source).with('https://example.com/vmwf.dmg')
-      expect(p).to receive(:action).with(:install)
-      expect(p).to receive(:notifies).with(:run,
-                                           'execute[Initialize VMware Fusion]')
-      p.send(:install_package)
     end
   end
 

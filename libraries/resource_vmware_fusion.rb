@@ -1,7 +1,7 @@
 # Encoding: UTF-8
 #
 # Cookbook Name:: vmware_fusion
-# Library:: resource_vmware_fusion_app
+# Library:: resource_vmware_fusion
 #
 # Copyright 2015 Jonathan Hartman
 #
@@ -22,18 +22,23 @@ require 'chef/resource/lwrp_base'
 
 class Chef
   class Resource
-    # A Chef resource for the VMWare Fusion app.
+    # A parent Chef resource for VMWare Fusion's app and config.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusionApp < Resource::LWRPBase
-      self.resource_name = :vmware_fusion_app
-      actions :install, :remove
-      default_action :install
+    class VmwareFusion < Resource::LWRPBase
+      self.resource_name = :vmware_fusion
+      actions :install, :remove, :configure
+      default_action [:install, :configure]
 
       #
       # Attribute for an optional specific package URL.
       #
       attribute :source, kind_of: String, default: nil
+
+      #
+      # Attribute for an optional VMware Fusion license key
+      #
+      attribute :license, kind_of: String, default: nil
     end
   end
 end
