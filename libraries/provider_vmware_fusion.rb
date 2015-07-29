@@ -51,6 +51,7 @@ class Chef
       action :install do
         vmware_fusion_app new_resource.name do
           action :install
+          notifies :configure, "vmware_fusion_config[#{new_resource.name}]"
         end
       end
 
@@ -60,7 +61,7 @@ class Chef
       action :configure do
         vmware_fusion_config new_resource.name do
           license new_resource.license
-          action :configure
+          action :nothing
         end
       end
 

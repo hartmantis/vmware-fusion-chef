@@ -40,6 +40,8 @@ describe Chef::Provider::VmwareFusion do
       p = provider
       expect(p).to receive(:vmware_fusion_app).with(name).and_yield
       expect(p).to receive(:action).with(:install)
+      expect(p).to receive(:notifies).with(:configure,
+                                           'vmware_fusion_config[default]')
       p.action_install
     end
   end
@@ -53,11 +55,11 @@ describe Chef::Provider::VmwareFusion do
     end
 
     shared_examples_for 'any resource' do
-      it 'uses a vmware_fusion_config to configure VMF' do
+      it 'uses a vmware_fusion_config resourceF' do
         p = provider
         expect(p).to receive(:vmware_fusion_config).with(name).and_yield
         expect(p).to receive(:license).with(license)
-        expect(p).to receive(:action).with(:configure)
+        expect(p).to receive(:action).with(:nothing)
         p.action_configure
       end
     end
