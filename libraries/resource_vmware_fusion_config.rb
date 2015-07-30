@@ -34,6 +34,14 @@ class Chef
       # Attribute for an optional VMware Fusion license key
       #
       attribute :license, kind_of: String, default: nil
+
+      #
+      # Override the sensitive method to return based on whether a license key
+      # was provided or not.
+      #
+      def sensitive(_arg = nil)
+        license.nil? ? false : true
+      end
     end
   end
 end
