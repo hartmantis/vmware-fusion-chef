@@ -50,7 +50,7 @@ describe Chef::Provider::VmwareFusionApp do
     end
   end
 
-  describe '#remove!' do
+  describe '#action_remove!' do
     it 'stops VMware Fusion and deletes its directories' do
       p = provider
       expect(p).to receive(:execute).with("killall 'VMware Fusion'").and_yield

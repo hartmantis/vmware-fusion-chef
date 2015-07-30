@@ -44,6 +44,7 @@ describe Chef::Provider::VmwareFusionConfig do
         cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
               "Initialize\\ VMware\\ Fusion.tool set '' '' '#{license}'"
         expect(p).to receive(:command).with(cmd)
+        expect(p).to receive(:sensitive).with(license.nil? ? false : true)
         expect(p).to receive(:action).with(:run)
         p.action_configure
       end

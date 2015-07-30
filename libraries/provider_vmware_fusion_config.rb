@@ -51,6 +51,7 @@ class Chef
         cmd = "#{path.gsub(' ', '\\ ')} set '' '' '#{new_resource.license}'"
         execute 'Initialize VMware Fusion' do
           command cmd
+          sensitive(new_resource.license.nil? ? false : true)
           action :run
         end
       end
