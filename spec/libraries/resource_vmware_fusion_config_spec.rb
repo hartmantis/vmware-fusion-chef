@@ -54,7 +54,7 @@ describe Chef::Resource::VmwareFusionConfig do
     end
   end
 
-  describe '#sensitive' do
+  describe '#to_text' do
     let(:license) { nil }
     let(:resource) do
       r = super()
@@ -65,30 +65,17 @@ describe Chef::Resource::VmwareFusionConfig do
     context 'no license attribute' do
       let(:license) { nil }
 
-      it 'returns false' do
-        expect(resource.sensitive).to eq(false)
+      it 'does not change anything' do
+        expect(resource.to_text).not_to include('license')
       end
     end
 
     context 'a license attribute' do
       let(:license) { 'abc123' }
 
-      it 'returns true' do
-        expect(resource.sensitive).to eq(true)
+      it 'sanitizes the license field' do
+        expect(resource.to_text).to include('license "****************"')
       end
-    end
-  end
-
-  describe '#to_text' do
-    let(:resource) do
-      r = super()
-      r.license('abc123')
-      r
-    end
-
-    it 'suppresses sensitive information' do
-      expected = 'suppressed sensitive resource output'
-      expect(resource.to_text).to eq(expected)
     end
   end
 end
