@@ -3,6 +3,7 @@ VMware Fusion Cookbook CHANGELOG
 
 v?.?.? (????-??-??)
 -------------------
+- Redact license keys from log output
 
 v0.1.0 (2015-07-28)
 -------------------

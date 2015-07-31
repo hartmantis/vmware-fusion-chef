@@ -36,11 +36,12 @@ class Chef
       attribute :license, kind_of: String, default: nil
 
       #
-      # Override the sensitive method to return based on whether a license key
-      # was provided or not.
+      # Override resource's text rendering to remove license strings.
       #
-      def sensitive(_arg = nil)
-        license.nil? ? false : true
+      # (see Resource#to_text)
+      #
+      def to_text
+        license.nil? ? super : super.gsub(license, '****************')
       end
     end
   end
