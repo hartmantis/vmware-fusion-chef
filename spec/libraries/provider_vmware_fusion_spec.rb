@@ -57,7 +57,7 @@ describe Chef::Provider::VmwareFusion do
         p = provider
         expect(p).to receive(:vmware_fusion_config).with(name).and_yield
         expect(p).to receive(:license).with(license)
-        expect(p).to receive(:action).with(:configure)
+        expect(p).to receive(:action).with(:create)
         p.action_configure
       end
     end

@@ -93,27 +93,28 @@ Attributes:
 
 ***vmware_fusion_config***
 
-Used to manage the configuration of VMware Fusion.
+An execute resource customized to handle the configuration of VMware Fusion
+through its included initialization script.
 
 Syntax:
 
     vmware_fusion_config 'default' do
       license 'abc123'
-      action :configure
+      action :create
     end
 
 Actions:
 
-| Action       | Description       |
-|--------------|-------------------|
-| `:configure` | Configure the app |
+| Action    | Description       |
+|-----------|-------------------|
+| `:create` | Configure the app |
 
 Attributes:
 
-| Attribute  | Default        | Description             |
-|------------|----------------|-------------------------|
-| license    | `nil`          | An optional license key |
-| action     | `:configure`   | Action(s) to perform    |
+| Attribute  | Default   | Description             |
+|------------|-----------|-------------------------|
+| license    | `nil`     | An optional license key |
+| action     | `:create` | Action(s) to perform    |
 
 Providers
 =========

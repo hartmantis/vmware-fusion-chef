@@ -60,7 +60,7 @@ class Chef
       action :configure do
         vmware_fusion_config new_resource.name do
           license new_resource.license
-          action :configure
+          action :create
         end
       end
 

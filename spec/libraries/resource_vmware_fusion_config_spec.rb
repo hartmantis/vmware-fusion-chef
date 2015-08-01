@@ -13,11 +13,11 @@ describe Chef::Resource::VmwareFusionConfig do
     end
 
     it 'sets the correct supported actions' do
-      expect(resource.allowed_actions).to eq([:nothing, :configure])
+      expect(resource.allowed_actions).to eq([:nothing, :create])
     end
 
     it 'sets the correct default action' do
-      expect(resource.action).to eq([:configure])
+      expect(resource.action).to eq([:create])
     end
   end
 
@@ -74,7 +74,7 @@ describe Chef::Resource::VmwareFusionConfig do
       let(:license) { 'abc123' }
 
       it 'sanitizes the license field' do
-        expect(resource.to_text).to include('license "****************"')
+        expect(resource.to_text).to include("license \"#{'*' * 16}\"")
       end
     end
   end
