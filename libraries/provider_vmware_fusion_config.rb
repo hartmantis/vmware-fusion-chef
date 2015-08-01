@@ -18,41 +18,44 @@
 # limitations under the License.
 #
 
-require 'net/http'
-require 'chef/provider/lwrp_base'
+require 'chef/provider/execute'
 require_relative 'provider_vmware_fusion'
 require_relative 'resource_vmware_fusion_config'
 
 class Chef
   class Provider
-    # A Chef provider for VMWare Fusion configuration.
+    # A Chef provider for VMWare Fusion configuration. Since that config is
+    # just an initialization script, build based off an execute resource.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusionConfig < Provider::LWRPBase
-      use_inline_resources
-
+    class VmwareFusionConfig < Provider::Execute
       provides :vmware_fusion_config, platform_family: 'mac_os_x'
 
+      alias_method :action_create, :action_run
+
+      private
+
       #
-      # WhyRun is supported by this provider.
+      # Overload the command string to call the VMware initialization tool.
       #
-      # @return [TrueClass, FalseClass]
+      # (see Execute#command)
       #
-      def whyrun_supported?
-        true
+      def command
+        path = ::File.join(VmwareFusion::PATH,
+                           'Contents/Library/Initialize VMware Fusion.tool')
+        "#{path.gsub(' ', '\\ ')} set '' '' '' '#{new_resource.license}'"
       end
 
       #
-      # Use an execute resource to call the VMF initialize script.
+      # Redact the license key from the command's description.
       #
-      action :configure do
-        path = ::File.join(VmwareFusion::PATH,
-                           'Contents/Library/Initialize VMware Fusion.tool')
-        cmd = "#{path.gsub(' ', '\\ ')} set '' '' '#{new_resource.license}'"
-        execute 'Initialize VMware Fusion' do
-          command cmd
-          sensitive(new_resource.license.nil? ? false : true)
-          action :run
+      # (see Execute#description)
+      #
+      def description
+        if new_resource.license.nil?
+          super
+        else
+          super.gsub(new_resource.license, '*' * 16)
         end
       end
     end

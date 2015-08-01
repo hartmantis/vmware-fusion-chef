@@ -18,22 +18,27 @@
 # limitations under the License.
 #
 
-require 'chef/resource/lwrp_base'
+require 'chef/resource/execute'
 
 class Chef
   class Resource
-    # A Chef resource for VMWare Fusion configuration.
+    # A Chef resource for VMware Fusion configuration. Since that config is
+    # just an initialization script, build based off an execute resource.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusionConfig < Resource::LWRPBase
+    class VmwareFusionConfig < Resource::Execute
       self.resource_name = :vmware_fusion_config
-      actions :configure
-      default_action :configure
+      self.allowed_actions = [:nothing, :create]
+      default_action :create
 
       #
-      # Attribute for an optional VMware Fusion license key
+      # Add an attribute for an optional VMware Fusion license key.
       #
-      attribute :license, kind_of: String, default: nil
+      # @return [NilClass, String]
+      #
+      def license(arg = nil)
+        set_or_return(:license, arg, kind_of: String, default: nil)
+      end
 
       #
       # Override resource's text rendering to remove license strings.
@@ -41,7 +46,7 @@ class Chef
       # (see Resource#to_text)
       #
       def to_text
-        license.nil? ? super : super.gsub(license, '****************')
+        license.nil? ? super : super.gsub(license, '*' * 16)
       end
     end
   end

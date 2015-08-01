@@ -22,13 +22,14 @@ describe Chef::Provider::VmwareFusionConfig do
     end
   end
 
-  describe '#whyrun_supported?' do
-    it 'returns true' do
-      expect(provider.whyrun_supported?).to eq(true)
+  describe '#action_create' do
+    it 'aliases to the execute resource #action_run method' do
+      expect_any_instance_of(described_class).to receive(:converge_by)
+      provider.action_create
     end
   end
 
-  describe '#action_configure' do
+  describe '#command' do
     let(:license) { nil }
     let(:new_resource) do
       r = super()
@@ -36,28 +37,54 @@ describe Chef::Provider::VmwareFusionConfig do
       r
     end
 
-    shared_examples_for 'any resource' do
-      it 'uses an execute to initialize VMware Fusion' do
-        p = provider
-        expect(p).to receive(:execute).with('Initialize VMware Fusion')
-          .and_yield
-        cmd = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
-              "Initialize\\ VMware\\ Fusion.tool set '' '' '#{license}'"
-        expect(p).to receive(:command).with(cmd)
-        expect(p).to receive(:sensitive).with(license.nil? ? false : true)
-        expect(p).to receive(:action).with(:run)
-        p.action_configure
+    context 'a resource without a license' do
+      let(:license) { nil }
+
+      it 'returns the license-less command' do
+        expected = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+                   "Initialize\\ VMware\\ Fusion.tool set '' '' '' ''"
+        expect(provider.send(:command)).to eq(expected)
       end
     end
 
-    context 'an all-default resource' do
-      it_behaves_like 'any resource'
-    end
-
-    context 'a resource with a given license key' do
+    context 'a resource with a license' do
       let(:license) { 'abc123' }
 
-      it_behaves_like 'any resource'
+      it 'returns the licensed command' do
+        expected = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+                   "Initialize\\ VMware\\ Fusion.tool set '' '' '' 'abc123'"
+        expect(provider.send(:command)).to eq(expected)
+      end
+    end
+  end
+
+  describe '#description' do
+    let(:license) { nil }
+    let(:new_resource) do
+      r = super()
+      r.license(license) unless license.nil?
+      r
+    end
+
+    context 'a resource without a license' do
+      let(:license) { nil }
+
+      it 'returns the regular output' do
+        expected = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+                   "Initialize\\ VMware\\ Fusion.tool set '' '' '' ''"
+        expect(provider.send(:description)).to eq(expected)
+      end
+    end
+
+    context 'a resource with a license' do
+      let(:license) { 'abc123' }
+
+      it 'returns with the redacted license' do
+        expected = '/Applications/VMware\\ Fusion.app/Contents/Library/' \
+                   'Initialize\\ VMware\\ Fusion.tool set ' \
+                   "'' '' '' '#{'*' * 16}'"
+        expect(provider.send(:description)).to eq(expected)
+      end
     end
   end
 end

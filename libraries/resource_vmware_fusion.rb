@@ -46,7 +46,7 @@ class Chef
       # (see Resource#to_text)
       #
       def to_text
-        license.nil? ? super : super.gsub(license, '****************')
+        license.nil? ? super : super.gsub(license, '*' * 16)
       end
     end
   end
