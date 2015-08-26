@@ -19,3 +19,4 @@
 #
 
 default['vmware_fusion']['license'] = nil
+default['vmware_fusion']['source'] = nil

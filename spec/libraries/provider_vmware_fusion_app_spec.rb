@@ -69,6 +69,12 @@ describe Chef::Provider::VmwareFusionApp do
 
   describe '#package_source' do
     let(:location) { 'https://example.com/vmwf.dmg' }
+    let(:source) { nil }
+    let(:new_resource) do
+      r = super()
+      r.source(source) unless source.nil?
+      r
+    end
 
     before(:each) do
       caf = Chef::Config[:ssl_ca_file]
@@ -77,9 +83,21 @@ describe Chef::Provider::VmwareFusionApp do
         .and_return('location' => location)
     end
 
-    it 'returns a download URL' do
-      expected = 'https://example.com/vmwf.dmg'
-      expect(provider.send(:package_source)).to eq(expected)
+    context 'an all-default resource' do
+      let(:source) { nil }
+
+      it 'returns a download URL' do
+        expected = 'https://example.com/vmwf.dmg'
+        expect(provider.send(:package_source)).to eq(expected)
+      end
+    end
+
+    context 'a resource with a given source path' do
+      let(:source) { '/path/to/vmware.dmg' }
+
+      it 'returns the source path' do
+        expect(provider.send(:package_source)).to eq('/path/to/vmware.dmg')
+      end
     end
   end
 end

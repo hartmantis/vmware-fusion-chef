@@ -36,11 +36,31 @@ describe Chef::Provider::VmwareFusion do
   end
 
   describe '#action_install' do
-    it 'uses a vmware_fusion_app to install VMF' do
-      p = provider
-      expect(p).to receive(:vmware_fusion_app).with(name).and_yield
-      expect(p).to receive(:action).with(:install)
-      p.action_install
+    let(:source) { nil }
+    let(:new_resource) do
+      r = super()
+      r.source(source) unless source.nil?
+      r
+    end
+
+    shared_examples_for 'any resource' do
+      it 'uses a vmware_fusion_app to install VMF' do
+        p = provider
+        expect(p).to receive(:vmware_fusion_app).with(name).and_yield
+        expect(p).to receive(:source).with(source)
+        expect(p).to receive(:action).with(:install)
+        p.action_install
+      end
+    end
+
+    context 'an all-default resource' do
+      it_behaves_like 'any resource'
+    end
+
+    context 'a resource with a given source path' do
+      let(:source) { '/path/to/vmware.dmg' }
+
+      it_behaves_like 'any resource'
     end
   end
 

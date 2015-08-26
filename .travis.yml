@@ -1,18 +1,20 @@
 language: objective-c
 
+branches:
+  only:
+    - master
+
 install:
   - curl -L https://www.chef.io/chef/install.sh | sudo bash -s -- -P chefdk
-  - chef exec bundle install --without=development integration
+  - chef exec bundle update
 
 before_script:
-  # Pending ENV support in Kitchen's Rake tasks and not just the CLI
   - cp .kitchen.travis.yml .kitchen.local.yml
 
 script:
-  - chef exec rake && chef exec kitchen test
+  - chef exec bundle exec rake && chef exec bundle exec kitchen test -c 2
 
 after_script:
 
 env:
   global:
-    # - KITCHEN_LOCAL_YAML=.kitchen.travis.yml

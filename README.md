@@ -28,7 +28,8 @@ Recipes
 
 ***default***
 
-Installs VMware Fusion with an optional license key attribute.
+Installs VMware Fusion with optional license key and/or package source
+attributes.
 
 Attributes
 ==========
@@ -38,6 +39,11 @@ Attributes
 An optional license key can be passed in to be configured during the Chef run:
 
     default['vmware_fusion']['license'] = nil
+
+An optional path to a VMWare Fusion .dmg file can be provided to install
+instead of downloading the package from VMware's site.
+
+    default['vmware_fusion']['source'] = nil
 
 Resources
 =========
@@ -50,6 +56,7 @@ Syntax:
 
     vmware_fusion 'default' do
       license 'abc123'
+      source '/path/to/vmware.dmg'
       action :install
     end
 
@@ -63,10 +70,11 @@ Actions:
 
 Attributes:
 
-| Attribute  | Default        | Description             |
-|------------|----------------|-------------------------|
-| license    | `nil`          | An optional license key |
-| action     | `:install`     | Action(s) to perform    |
+| Attribute  | Default        | Description                            |
+|------------|----------------|----------------------------------------|
+| license    | `nil`          | An optional license key                |
+| source     | `nil`          | An optional path to a VMware .dmg file |
+| action     | `:install`     | Action(s) to perform                   |
 
 ***vmware_fusion_app***
 
@@ -75,6 +83,7 @@ Used to manage the installation of the VMware Fusion app.
 Syntax:
 
     vmware_fusion_app 'default' do
+      source '/path/to/vmware.dmg'
       action :install
     end
 
@@ -87,9 +96,10 @@ Actions:
 
 Attributes:
 
-| Attribute  | Default        | Description             |
-|------------|----------------|-------------------------|
-| action     | `:install`     | Action(s) to perform    |
+| Attribute  | Default        | Description                            |
+|------------|----------------|----------------------------------------|
+| source     | `nil`          | An optional path to a VMware .dmg file |
+| action     | `:install`     | Action(s) to perform                   |
 
 ***vmware_fusion_config***
 
