@@ -79,7 +79,7 @@ class Chef
       # @return [String] a remote package URL
       #
       def package_source
-        @package_source ||= begin
+        @package_source ||= new_resource.source || begin
           u = URI.parse(URL)
           opts = { use_ssl: u.scheme == 'https',
                    ca_file: Chef::Config[:ssl_ca_file] }

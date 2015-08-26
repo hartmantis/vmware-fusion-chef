@@ -50,6 +50,7 @@ class Chef
       #
       action :install do
         vmware_fusion_app new_resource.name do
+          source new_resource.source
           action :install
         end
       end

@@ -3,37 +3,41 @@
 require_relative '../spec_helper'
 
 describe 'vmware-fusion::default' do
-  let(:overrides) { nil }
+  let(:overrides) { {} }
   let(:runner) do
     ChefSpec::SoloRunner.new do |node|
-      overrides && overrides.each { |k, v| node.set['vmware_fusion'][k] = v }
+      overrides.each { |k, v| node.set['vmware_fusion'][k] = v }
     end
   end
   let(:chef_run) { runner.converge(described_recipe) }
 
-  context 'all default attributes' do
-    let(:overrides) { nil }
-
+  shared_examples_for 'any attribute set' do
     it 'installs VMWare Fusion' do
-      expect(chef_run).to install_vmware_fusion('default').with(license: nil)
+      expect(chef_run).to install_vmware_fusion('default')
+        .with(license: overrides[:license], source: overrides[:source])
     end
 
     it 'configures VMware Fusion' do
-      expect(chef_run).to configure_vmware_fusion('default').with(license: nil)
+      expect(chef_run).to configure_vmware_fusion('default')
+        .with(license: overrides[:license], source: overrides[:source])
     end
+  end
+
+  context 'all default attributes' do
+    let(:overrides) { {} }
+
+    it_behaves_like 'any attribute set'
   end
 
   context 'an overridden license attribute' do
     let(:overrides) { { license: 'abc123' } }
 
-    it 'installs VMware Fusion' do
-      expect(chef_run).to install_vmware_fusion('default')
-        .with(license: 'abc123')
-    end
+    it_behaves_like 'any attribute set'
+  end
 
-    it 'configures VMware Fusion' do
-      expect(chef_run).to configure_vmware_fusion('default')
-        .with(license: 'abc123')
-    end
+  context 'an overridden source attribute' do
+    let(:overrides) { { source: '/path/to/vmware.dmg' } }
+
+    it_behaves_like 'any attribute set'
   end
 end
