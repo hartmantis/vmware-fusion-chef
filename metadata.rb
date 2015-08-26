@@ -7,7 +7,7 @@ maintainer_email 'j@p4nt5.com'
 license          'apache2'
 description      'Installs VMWare Fusion'
 long_description 'Installs VMWare Fusion'
-version          '0.2.0'
+version          '0.2.1'
 
 depends          'dmg', '~> 2.2'
 

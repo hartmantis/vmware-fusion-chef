@@ -1,6 +1,9 @@
 VMware Fusion Cookbook CHANGELOG
 ================================
 
+v?.?.? (????-??-??)
+-------------------
+
 v0.2.0 (2015-08-25)
 -------------------
 - Support a `source` attribute for specific .dmg package paths
