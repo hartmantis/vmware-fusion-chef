@@ -5,8 +5,11 @@ require_relative '../../libraries/provider_vmware_fusion_config'
 
 describe Chef::Provider::VmwareFusionConfig do
   let(:name) { 'default' }
-  let(:new_resource) { Chef::Resource::VmwareFusionConfig.new(name, nil) }
-  let(:provider) { described_class.new(new_resource, nil) }
+  let(:run_context) { ChefSpec::SoloRunner.new.converge.run_context }
+  let(:new_resource) do
+    Chef::Resource::VmwareFusionConfig.new(name, run_context)
+  end
+  let(:provider) { described_class.new(new_resource, run_context) }
 
   describe '.provides?' do
     let(:platform) { nil }
