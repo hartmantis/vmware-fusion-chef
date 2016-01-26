@@ -18,32 +18,63 @@
 # limitations under the License.
 #
 
-require 'chef/resource/lwrp_base'
+require 'chef/resource'
+require_relative 'resource_vmware_fusion_app'
+require_relative 'resource_vmware_fusion_config'
 
 class Chef
   class Resource
     # A parent Chef resource for VMWare Fusion's app and config.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusion < Resource::LWRPBase
-      self.resource_name = :vmware_fusion
-      actions :install, :remove, :configure
+    class VmwareFusion < Resource
+      PATH ||= '/Applications/VMware Fusion.app'
+
+      provides :vmware_fusion, platform_family: 'mac_os_x'
+
       default_action [:install, :configure]
 
       #
-      # Attribute for an optional specific package URL.
+      # Property for an optional specific package URL.
       #
-      attribute :source, kind_of: String, default: nil
+      property :source, kind_of: String, default: nil
 
       #
-      # Attribute for an optional VMware Fusion license key.
+      # Property for an optional VMware Fusion license key.
       #
-      attribute :license, kind_of: String, default: nil
+      property :license, kind_of: String, default: nil
+
+      #
+      # Use the vmware_fusion_app resource to install the app.
+      #
+      action :install do
+        vmware_fusion_app new_resource.name do
+          source new_resource.source
+        end
+      end
+
+      #
+      # Use the vmware_fusion_config resource to configure VMware Fusion.
+      #
+      action :configure do
+        vmware_fusion_config new_resource.name do
+          license new_resource.license
+        end
+      end
+
+      #
+      # Use the vmware_fusion_app resource to remove the app.
+      #
+      action :remove do
+        vmware_fusion_app new_resource.name do
+          action :remove
+        end
+      end
 
       #
       # Override resource's text rendering to remove license strings.
       #
-      # (see Resource#to_text)
+      # (see Chef::Resource#to_text)
       #
       def to_text
         license.nil? ? super : super.gsub(license, '*' * 16)
