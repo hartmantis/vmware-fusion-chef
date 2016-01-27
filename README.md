@@ -126,21 +126,6 @@ Attributes:
 | license    | `nil`     | An optional license key |
 | action     | `:create` | Action(s) to perform    |
 
-Providers
-=========
-
-***Chef::Provider::VmwareFusion***
-
-Main provider for OS X (the only platform VMware Fusion is for).
-
-***Chef::Provider::VmwareFusionApp***
-
-A provider dedicated to app installation and removal.
-
-***Chef::Provider::VmwareFusionConfig***
-
-A provider dedicated to app configuration.
-
 Contributing
 ============
 

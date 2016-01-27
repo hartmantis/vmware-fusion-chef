@@ -1,8 +1,10 @@
 VMware Fusion Cookbook CHANGELOG
 ================================
 
-v?.?.? (????-??-??)
--------------------
+Unreleased
+----------
+- Convert to Chef custom resources (breaking compatibility with Chef < 12 and
+  requiring the compat_resource cookbook for Chef < 12.5)
 
 v0.2.0 (2015-08-25)
 -------------------
