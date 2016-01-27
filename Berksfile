@@ -7,6 +7,8 @@ metadata
 group :test do
   cookbook 'resource_vmware_fusion_test',
            path: 'spec/support/cookbooks/resource_vmware_fusion_test'
+  cookbook 'resource_vmware_fusion_app_test',
+           path: 'spec/support/cookbooks/resource_vmware_fusion_app_test'
 end
 
 group :integration do

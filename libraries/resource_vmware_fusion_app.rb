@@ -18,22 +18,51 @@
 # limitations under the License.
 #
 
-require 'chef/resource/lwrp_base'
+require 'chef/http'
+require 'chef/resource'
 
 class Chef
   class Resource
     # A Chef resource for the VMWare Fusion app.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusionApp < Resource::LWRPBase
-      self.resource_name = :vmware_fusion_app
-      actions :install, :remove
+    class VmwareFusionApp < Resource
+      URL ||= 'https://www.vmware.com/go/try-fusion-en'
+
+      provides :vmware_fusion_app, platform_family: 'mac_os_x'
+
       default_action :install
 
       #
-      # Attribute for an optional specific package URL.
+      # Property for an optional specific package URL.
       #
-      attribute :source, kind_of: String, default: nil
+      property :source, kind_of: String, default: URL
+
+      #
+      # Use a dmg_package resource to download and install the app.
+      #
+      action :install do
+        dmg_package 'VMware Fusion' do
+          source new_resource.source
+          action :install
+        end
+      end
+
+      #
+      # Remove the app.
+      #
+      action :remove do
+        execute "killall 'VMware Fusion'" do
+          ignore_failure true
+        end
+        [::File.expand_path('~/Library/Application Support/VMware Fusion'),
+         ::File.expand_path(VmwareFusion::PATH)].each do |d|
+          directory d do
+            recursive true
+            action :delete
+          end
+        end
+      end
     end
   end
 end
