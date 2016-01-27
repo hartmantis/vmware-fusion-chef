@@ -36,14 +36,14 @@ class Chef
       #
       # Property for an optional specific package URL.
       #
-      property :source, kind_of: String, default: URL
+      property :source, kind_of: [String, nil], default: nil
 
       #
       # Use a dmg_package resource to download and install the app.
       #
       action :install do
         dmg_package 'VMware Fusion' do
-          source new_resource.source
+          source new_resource.source || URL
           action :install
         end
       end
