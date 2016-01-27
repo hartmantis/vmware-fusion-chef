@@ -35,21 +35,20 @@ class Chef
       default_action [:install, :configure]
 
       #
-      # Property for an optional specific package URL.
+      # Merge in the properties from the vmware_fusion_app and
+      # vmware_fusion_config resources.
       #
-      property :source, kind_of: String, default: nil
-
-      #
-      # Property for an optional VMware Fusion license key.
-      #
-      property :license, kind_of: String, default: nil
+      VmwareFusionApp.properties.each { |k, v| property k, v }
+      VmwareFusionConfig.properties.each { |k, v| property k, v }
 
       #
       # Use the vmware_fusion_app resource to install the app.
       #
       action :install do
         vmware_fusion_app new_resource.name do
-          source new_resource.source
+          VmwareFusionApp.properties.keys.each do |k|
+            send(k, new_resource.send(k))
+          end
         end
       end
 
@@ -58,7 +57,9 @@ class Chef
       #
       action :configure do
         vmware_fusion_config new_resource.name do
-          license new_resource.license
+          VmwareFusionConfig.properties.keys.each do |k|
+            send(k, new_resource.send(k))
+          end
         end
       end
 
