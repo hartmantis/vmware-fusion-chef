@@ -1,11 +1,12 @@
-# Encoding: UTF-8
+# encoding: utf-8
 
 require_relative '../spec_helper'
 
 describe 'vmware-fusion::default' do
+  let(:platform) { { platform: 'mac_os_x', version: '10.10' } }
   let(:overrides) { {} }
   let(:runner) do
-    ChefSpec::SoloRunner.new do |node|
+    ChefSpec::SoloRunner.new(platform) do |node|
       overrides.each { |k, v| node.set['vmware_fusion'][k] = v }
     end
   end

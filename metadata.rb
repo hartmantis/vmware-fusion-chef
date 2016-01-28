@@ -1,6 +1,5 @@
-# Encoding: UTF-8
-#
-# rubocop:disable SingleSpaceBeforeFirstArg
+# encoding: utf-8
+
 name             'vmware-fusion'
 maintainer       'Jonathan Hartman'
 maintainer_email 'j@p4nt5.com'
@@ -12,4 +11,3 @@ version          '0.2.1'
 depends          'dmg', '~> 2.2'
 
 supports         'mac_os_x'
-# rubocop:enable SingleSpaceBeforeFirstArg

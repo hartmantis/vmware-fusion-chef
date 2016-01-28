@@ -1,9 +1,9 @@
-# Encoding: UTF-8
+# encoding: utf-8
 #
 # Cookbook Name:: vmware-fusion
 # Library:: matchers
 #
-# Copyright 2015 Jonathan Hartman
+# Copyright 2015-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,25 +19,17 @@
 #
 
 if defined?(ChefSpec)
-  [:vmware_fusion, :vmware_fusion_app, :vmware_fusion_config].each do |m|
-    ChefSpec.define_matcher(m)
-  end
+  {
+    vmware_fusion: %i(install remove configure),
+    vmware_fusion_app: %i(install remove),
+    vmware_fusion_config: %i(create)
+  }.each do |matcher, actions|
+    ChefSpec.define_matcher(matcher)
 
-  [:install, :remove, :configure].each do |a|
-    define_method("#{a}_vmware_fusion") do |name|
-      ChefSpec::Matchers::ResourceMatcher.new(:vmware_fusion, a, name)
-    end
-  end
-
-  [:install, :remove].each do |a|
-    define_method("#{a}_vmware_fusion_app") do |name|
-      ChefSpec::Matchers::ResourceMatcher.new(:vmware_fusion_app, a, name)
-    end
-  end
-
-  [:configure].each do |a|
-    define_method("#{a}_vmware_fusion_config") do |name|
-      ChefSpec::Matchers::ResourceMatcher.new(:vmware_fusion_config, a, name)
+    actions.each do |action|
+      define_method("#{action}_#{matcher}") do |name|
+        ChefSpec::Matchers::ResourceMatcher.new(matcher, action, name)
+      end
     end
   end
 end

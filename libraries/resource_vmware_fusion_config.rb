@@ -1,9 +1,10 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 #
 # Cookbook Name:: vmware_fusion
 # Library:: resource_vmware_fusion_config
 #
-# Copyright 2015 Jonathan Hartman
+# Copyright 2015-2016, Jonathan Hartman
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,26 +19,36 @@
 # limitations under the License.
 #
 
-require 'chef/resource/execute'
+require 'chef/resource'
 
 class Chef
   class Resource
-    # A Chef resource for VMware Fusion configuration. Since that config is
-    # just an initialization script, build based off an execute resource.
+    # A Chef resource for VMware Fusion configuration, aka running the included
+    # initialization script to install a license key.
     #
     # @author Jonathan Hartman <j@p4nt5.com>
-    class VmwareFusionConfig < Resource::Execute
-      self.resource_name = :vmware_fusion_config
-      self.allowed_actions = [:nothing, :create]
+    class VmwareFusionConfig < Resource
+      PATH = '/Applications/VMware Fusion.app'.freeze unless defined?(PATH)
+
+      provides :vmware_fusion_config, platform_family: 'mac_os_x'
+
       default_action :create
 
       #
-      # Add an attribute for an optional VMware Fusion license key.
+      # A property for an optional VMware Fusion license key.
       #
-      # @return [NilClass, String]
+      property :license, [String, nil], default: nil
+
       #
-      def license(arg = nil)
-        set_or_return(:license, arg, kind_of: String, default: nil)
+      # Use an execute resource to run the Vmware init tool.
+      #
+      action :create do
+        execute 'Initialize VMware' do
+          p = ::File.join(PATH,
+                          'Contents/Library/Initialize VMware Fusion.tool')
+          command "#{p.gsub(' ', '\\ ')} set '' '' '' '#{new_resource.license}'"
+          sensitive true if new_resource.license
+        end
       end
 
       #

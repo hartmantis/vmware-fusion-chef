@@ -1,4 +1,4 @@
-# Encoding: UTF-8
+# encoding: utf-8
 
 guard :rspec, all_on_start: true, notification: false do
   watch(%r{^spec/.+_spec\.rb$})
