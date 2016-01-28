@@ -16,8 +16,6 @@ suites:
   - name: default
     run_list:
       - recipe[vmware-fusion]
-    attributes:
-  - name: uninstall
+  - name: remove
     run_list:
-      - recipe[vmware-fusion_test::uninstall]
-    attributes:
+      - recipe[vmware-fusion_test::remove]

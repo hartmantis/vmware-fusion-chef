@@ -2,7 +2,7 @@
 
 require_relative '../spec_helper'
 
-describe 'vmware-fusion::app' do
+describe 'vmware-fusion::default::app' do
   describe file('/Applications/VMware Fusion.app') do
     it 'exists' do
       expect(subject).to be_directory
