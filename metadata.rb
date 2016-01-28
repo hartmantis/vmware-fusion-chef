@@ -1,4 +1,4 @@
-# Encoding: UTF-8
+# encoding: utf-8
 
 name             'vmware-fusion'
 maintainer       'Jonathan Hartman'

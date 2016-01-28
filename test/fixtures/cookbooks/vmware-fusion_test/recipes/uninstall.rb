@@ -1,4 +1,4 @@
-# Encoding: UTF-8
+# encoding: utf-8
 
 include_recipe 'vmware-fusion'
 

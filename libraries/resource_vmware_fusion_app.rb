@@ -1,4 +1,5 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 #
 # Cookbook Name:: vmware_fusion
 # Library:: resource_vmware_fusion_app
@@ -27,7 +28,9 @@ class Chef
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class VmwareFusionApp < Resource
-      URL ||= 'https://www.vmware.com/go/try-fusion-en'
+      unless defined?(URL)
+        URL = 'https://www.vmware.com/go/try-fusion-en'.freeze
+      end
 
       provides :vmware_fusion_app, platform_family: 'mac_os_x'
 

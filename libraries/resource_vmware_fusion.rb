@@ -1,4 +1,5 @@
-# Encoding: UTF-8
+# encoding: utf-8
+# frozen_string_literal: true
 #
 # Cookbook Name:: vmware_fusion
 # Library:: resource_vmware_fusion
@@ -28,7 +29,7 @@ class Chef
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class VmwareFusion < Resource
-      PATH ||= '/Applications/VMware Fusion.app'
+      PATH = '/Applications/VMware Fusion.app'.freeze unless defined?(PATH)
 
       provides :vmware_fusion, platform_family: 'mac_os_x'
 

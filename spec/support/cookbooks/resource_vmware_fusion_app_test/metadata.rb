@@ -1,4 +1,4 @@
-# Encoding: UTF-8
+# encoding: utf-8
 
 name             'resource_vmware_fusion_app_test'
 maintainer       'Jonathan Hartman'
