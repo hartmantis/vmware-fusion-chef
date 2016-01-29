@@ -15,7 +15,7 @@ describe 'resource_vmware_fusion::mac_os_x::10_10' do
   end
   let(:converge) { runner.converge("resource_vmware_fusion_test::#{action}") }
 
-  context 'the default action ([:install, :configure])' do
+  context 'the default action (:install)' do
     let(:action) { :default }
 
     shared_examples_for 'any property set' do

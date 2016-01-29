@@ -5,6 +5,7 @@ Unreleased
 ----------
 - Convert to Chef custom resources (breaking compatibility with Chef < 12 and
   requiring the compat_resource cookbook for Chef < 12.5)
+- Merge `vmware_fusion` resource's `:configure` action into `:install`
 
 v0.2.0 (2015-08-25)
 -------------------

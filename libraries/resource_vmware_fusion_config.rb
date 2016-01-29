@@ -28,8 +28,6 @@ class Chef
     #
     # @author Jonathan Hartman <j@p4nt5.com>
     class VmwareFusionConfig < Resource
-      PATH = '/Applications/VMware Fusion.app'.freeze unless defined?(PATH)
-
       provides :vmware_fusion_config, platform_family: 'mac_os_x'
 
       default_action :create
@@ -44,7 +42,7 @@ class Chef
       #
       action :create do
         execute 'Initialize VMware' do
-          p = ::File.join(PATH,
+          p = ::File.join(VmwareFusion::PATH,
                           'Contents/Library/Initialize VMware Fusion.tool')
           command "#{p.gsub(' ', '\\ ')} set '' '' '' '#{new_resource.license}'"
           sensitive true if new_resource.license
