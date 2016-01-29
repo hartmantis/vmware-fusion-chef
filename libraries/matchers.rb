@@ -20,7 +20,7 @@
 
 if defined?(ChefSpec)
   {
-    vmware_fusion: %i(install remove configure),
+    vmware_fusion: %i(install remove),
     vmware_fusion_app: %i(install remove),
     vmware_fusion_config: %i(create)
   }.each do |matcher, actions|

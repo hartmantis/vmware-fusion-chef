@@ -62,11 +62,10 @@ Syntax:
 
 Actions:
 
-| Action       | Description       |
-|--------------|-------------------|
-| `:install`   | Install the app   |
-| `:remove`    | Uninstall the app |
-| `:configure` | Configure the app |
+| Action       | Description                   |
+|--------------|-------------------------------|
+| `:install`   | Install and configure the app |
+| `:remove`    | Uninstall the app             |
 
 Attributes:
 

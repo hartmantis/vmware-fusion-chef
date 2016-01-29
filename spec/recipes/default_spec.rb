@@ -17,11 +17,6 @@ describe 'vmware-fusion::default' do
       expect(chef_run).to install_vmware_fusion('default')
         .with(license: overrides[:license], source: overrides[:source])
     end
-
-    it 'configures VMware Fusion' do
-      expect(chef_run).to configure_vmware_fusion('default')
-        .with(license: overrides[:license], source: overrides[:source])
-    end
   end
 
   context 'all default attributes' do

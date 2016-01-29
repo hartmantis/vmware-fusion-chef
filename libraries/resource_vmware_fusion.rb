@@ -33,7 +33,7 @@ class Chef
 
       provides :vmware_fusion, platform_family: 'mac_os_x'
 
-      default_action [:install, :configure]
+      default_action :install
 
       #
       # Merge in the properties from the vmware_fusion_app and
@@ -43,7 +43,7 @@ class Chef
       VmwareFusionConfig.properties.each { |k, v| property k, v }
 
       #
-      # Use the vmware_fusion_app resource to install the app.
+      # Install the VMware Fusion app and configure the license.
       #
       action :install do
         vmware_fusion_app new_resource.name do
@@ -51,12 +51,6 @@ class Chef
             send(k, new_resource.send(k))
           end
         end
-      end
-
-      #
-      # Use the vmware_fusion_config resource to configure VMware Fusion.
-      #
-      action :configure do
         vmware_fusion_config new_resource.name do
           VmwareFusionConfig.properties.keys.each do |k|
             send(k, new_resource.send(k))
