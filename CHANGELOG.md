@@ -1,8 +1,8 @@
 VMware Fusion Cookbook CHANGELOG
 ================================
 
-Unreleased
-----------
+v1.0.0 (2016-01-29)
+-------------------
 - Convert to Chef custom resources (breaking compatibility with Chef < 12 and
   requiring the compat_resource cookbook for Chef < 12.5)
 - Merge `vmware_fusion` resource's `:configure` action into `:install`
